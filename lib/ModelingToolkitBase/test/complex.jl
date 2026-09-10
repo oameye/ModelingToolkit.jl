@@ -61,3 +61,13 @@ end
     sol = solve(prob)
     @test SciMLBase.successful_retcode(sol)
 end
+
+@testset "::Complex{Real} for continuous variables" begin
+    @variables z(t)::Complex{Real}
+    @test ModelingToolkitBase.is_floatingpoint_symtype(Complex{Real})
+    @mtkcompile sys = System([D(z) ~ im * z], t)
+    prob = ODEProblem(sys, [z => 1.0 + 0im], (0.0, 0.2))
+    sol = solve(prob, Tsit5(), saveat = 0.2)
+    @test SciMLBase.successful_retcode(sol)
+    @test sol.u[end][1] ≈ exp(0.2im) rtol = 1e-5
+end
