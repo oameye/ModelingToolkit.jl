@@ -1236,7 +1236,7 @@ Check if `T` is an appropriate symtype for a symbolic variable representing a fl
 point number or array of such numbers.
 """
 function is_floatingpoint_symtype(T)
-    return T === Real || T === Number || T === Complex || T <: AbstractFloat ||
+    return T === Real || T === Number || T <: Complex || T <: AbstractFloat ||
         T <: AbstractArray && is_floatingpoint_symtype(eltype(T))
 end
 
